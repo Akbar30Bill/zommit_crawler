@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+from bs4 import BeautifulSoup
+import urllib.request
+import re
+from pprint import pprint
+def get_links(url):
+    html_page = urllib.request.urlopen(url)
+    soup = BeautifulSoup(html_page, 'html.parser')
+    links = []
+    for link in soup.findAll('a', attrs={'href': re.compile("^https://www.zoomit.ir/20")}):
+        links.append(link.get('href'))
+    return(links)
+links = (list(dict.fromkeys(get_links("https://www.zoomit.ir"))))
+for link in links:
+    html_page = urllib.request.urlopen(link)
+    soup = BeautifulSoup(html_page, 'html.parser')
+    data = []
+    for p in soup.findAll('p'):
+        data.append(p.getText())
+    for index in range(len(data)-15, 0, -1):
+        print(data[index])
